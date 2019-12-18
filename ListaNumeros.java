@@ -1,12 +1,11 @@
-
+import java.util.Arrays;
 /**
  * La clase encapsula en un array
  * una lista de numeros
  * 
- * @author - 
+ * @author - Rubén González Rivera
  * 
  */
-import java.util.Arrays;
 
 public class ListaNumeros 
 {
@@ -23,10 +22,12 @@ public class ListaNumeros
      */
     public ListaNumeros(int n) 
     {
-        if (n > TAM_LISTA) {
+        if (n > TAM_LISTA){
             throw new IllegalArgumentException("Valor no permitido para tamaño lista");
+        }else{
+            numeros = new int[n];
         }
-        // completar
+        pos = 0;
     }
 
     /**
@@ -38,9 +39,13 @@ public class ListaNumeros
      */
     public boolean addElemento(int numero)
     {
-        
-        return true;
-
+        if(!estaCompleta() && !estaElemento(numero)){
+            numeros[pos] = numero;
+            pos++;
+            return true;
+        }else{
+            return false;
+        }
     }
 
     /**
@@ -48,8 +53,7 @@ public class ListaNumeros
      */
     public boolean estaCompleta()
     {
-        return true;
-
+        return pos > numeros.length;
     }
 
     /**
@@ -57,8 +61,7 @@ public class ListaNumeros
      */
     public boolean estaVacia() 
     {
-        return true;
-
+        return pos == 0;
     }
 
     /**
@@ -66,8 +69,7 @@ public class ListaNumeros
      */
     public int getTotalNumeros()
     {
-        return 0;
-
+        return pos;
     }
 
     /**
@@ -75,7 +77,12 @@ public class ListaNumeros
      */
     public void vaciarLista() 
     {
-        
+        if(!estaVacia()){
+            for(int a = 0; a < pos; a++){
+                numeros[a] = 0;
+            }
+            pos = 0;
+        }
     }
 
     /**
@@ -84,7 +91,11 @@ public class ListaNumeros
      */
     public boolean estaElemento(int numero) 
     {
-        
+        for(int a = 0; a < pos; a++){
+            if(numeros[a] == numero){
+                return true;
+            }
+        }
         return false;
     }
 
@@ -97,8 +108,16 @@ public class ListaNumeros
      */
     public String toString() 
     {
-        
-        return null;
+        String str = "";
+        if(estaVacia()){
+            System.out.print("||");
+        }else{
+            for(int a = 0; a < pos; a++){
+                str += String.format("%s %d","|",numeros[a]);
+            }
+            str += String.format("%s", "|");
+        }
+        return str;
     }
 
     /**
@@ -122,9 +141,23 @@ public class ListaNumeros
      * (ver detalles en el enunciado)
      */
     public int[] expandir() {
-         
-
-        return null;
+        if(esImpar(numeros.length)){
+            throw new RuntimeException("Nº impar de elementos en el array, añada uno más");
+        }else{
+            int longitud = 0;
+            for(int n = 0; n < pos; n += 2){
+                longitud += numeros[n];
+            }
+            int[] expandido = new int [longitud];
+            int posExpandido = 0;
+            for(int a = 0; a < pos; a += 2){
+                for(int b = 0; b < numeros[a]; b++){
+                    expandido[posExpandido] = numeros[a + 1];
+                    posExpandido++;
+                }
+            }
+            return expandido;
+        }
     }
 
     /**
@@ -145,11 +178,19 @@ public class ListaNumeros
      *  después de reorganizarParesImpares() quedaría {4, 2, 8, 3, 7, 9, 5, 11, 13}
      */
     public void reorganizarParesImpares() {
-         
-
+        int d = 0;
+        int cambia = 0;
+        int newPos = 0;
+        for(int a = 0; a < pos; a ++){
+            if(!esImpar(numeros[a])){
+                cambia = numeros[d];
+                numeros[d] = numeros[a];
+                numeros[a] = cambia;
+                d++;
+            }
+        }
     }
 
-     
     /**
      *  Usando métodos de la clase Arrays haz una copia 
      *  de numeros al tamaño indicado por su longitud lógica
@@ -158,9 +199,15 @@ public class ListaNumeros
      *  que incluya los elementos del array ordenado
      */
     public ListaNumeros nuevaLista() {
-         
-        return null;
+        int[] copia = new int[numeros.length];
+        System.arraycopy(numeros, 0, copia, 0, numeros.length);
+        Arrays.sort(copia);
 
+        ListaNumeros nuevaLista = new ListaNumeros(copia.length);
+        for(int a = 0; a <= copia.length; a++){
+            nuevaLista.addElemento(copia[a]);
+        }
+        return nuevaLista;
     }
 
     /**
@@ -176,8 +223,15 @@ public class ListaNumeros
      */
     public int[][] toArray2D() 
     {
-        
-        return null;
+        int[][] array2D = new int[4][4];
+        int posicion = 0;
+        for(int f = 0; f < array2D.length; f++){
+            for(int c = 0; c < array2D.length; c++){
+                array2D[f][c] = numeros[posicion];
+                posicion++;
+            }
+        }
+        return array2D;
     }
 
     /**
@@ -200,8 +254,6 @@ public class ListaNumeros
         int[] expandido = numeros.expandir();
         System.out.println("Expandido: " + Arrays.toString(expandido));
         // seguir completando
-        
-        
-        
+
     }
 }
