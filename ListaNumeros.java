@@ -178,15 +178,17 @@ public class ListaNumeros
      *  después de reorganizarParesImpares() quedaría {4, 2, 8, 3, 7, 9, 5, 11, 13}
      */
     public void reorganizarParesImpares() {
-        int d = 0;
-        int cambia = 0;
-        int newPos = 0;
+        int par = 0;
+        int imparPos = 0;
+        
         for(int a = 0; a < pos; a ++){
             if(!esImpar(numeros[a])){
-                cambia = numeros[d];
-                numeros[d] = numeros[a];
-                numeros[a] = cambia;
-                d++;
+                par = numeros[a];
+                for(int b = a; b > imparPos; b--){
+                    numeros[b] = numeros[b - 1];
+                }
+                numeros[imparPos] = par;
+                imparPos ++;
             }
         }
     }
@@ -199,15 +201,15 @@ public class ListaNumeros
      *  que incluya los elementos del array ordenado
      */
     public ListaNumeros nuevaLista() {
-        int[] copia = new int[numeros.length];
-        System.arraycopy(numeros, 0, copia, 0, numeros.length);
+        int[] copia = new int[pos];
+        System.arraycopy(numeros, 0, copia, 0, pos);
         Arrays.sort(copia);
 
-        ListaNumeros nuevaLista = new ListaNumeros(copia.length);
-        for(int a = 0; a <= copia.length; a++){
-            nuevaLista.addElemento(copia[a]);
+        ListaNumeros nuevaLis = new ListaNumeros(pos);
+        for(int a = 0; a < pos; a++){
+            nuevaLis.addElemento(copia[a]);
         }
-        return nuevaLista;
+        return nuevaLis;
     }
 
     /**
